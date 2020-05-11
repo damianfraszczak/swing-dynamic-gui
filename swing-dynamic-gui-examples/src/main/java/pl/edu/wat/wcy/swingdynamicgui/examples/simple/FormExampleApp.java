@@ -4,6 +4,7 @@ import pl.edu.wat.wcy.swingdynamicgui.examples.model.City;
 import pl.edu.wat.wcy.swingdynamicgui.examples.model.Person;
 import pl.edu.wat.wcy.swingdynamicgui.examples.model.Sex;
 import pl.edy.wat.wcy.dynamicgui.DynamicContextBuilder;
+import pl.edy.wat.wcy.dynamicgui.form.components.formgroup.TabsGroupsFormGroupRenderer;
 import pl.edy.wat.wcy.dynamicgui.form.models.DynamicFormContext;
 import pl.edy.wat.wcy.dynamicgui.form.models.FormConfig;
 import pl.edy.wat.wcy.dynamicgui.utils.SwingUtils;
@@ -23,6 +24,7 @@ public class FormExampleApp {
         });
         FormConfig formConfig = DynamicContextBuilder.getFormConfigBasedOnAnnotation(Person.class);
         formConfig.addSelectProvider("city", (object, field) -> cities);
+        formConfig.setFormGroupsRenderer(new TabsGroupsFormGroupRenderer());
 
         DynamicFormContext formContext = DynamicContextBuilder.getFormContextSync(
                 Person.builder()

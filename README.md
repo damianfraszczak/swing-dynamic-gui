@@ -2,9 +2,90 @@
 This is a library providing easy and customisable way of building GUI in Java Swing applications utilizing forms and tables generation based on config via both annotations and code.
 
 # How to start
+## Provided examples
 In order to run exampleas please download repository and execute `mvn install` and then just run the choosen example.
+## Create simple form
+1. Create used model and add `@DynamicFormField` annotations to some fields, for example
+````java
+@DynamicFormConfig(
+        labelPosition = LabelPosition.TOP,
+        formGroups = {
+                @DynamicFormGroup(name = "Personal information", fields = {"name", "surname", "sex", "dateOfBirth", "city"}),
+                @DynamicFormGroup(name = "Additional info", fields = {"salary", "favouriteColors"}),
+        }
+)
+public class Person {
+    @DynamicFormField(fieldSize = FieldSize.TWO)
+    // javax.validation constraint
+    @NotNull
+    private String name;
+    @DynamicFormField(fieldSize = FieldSize.TWO)
+    @NotNull
+    private String surname;
+    @DynamicFormField
+    @NotNull
+    private Sex sex;
+    @DynamicFormField(fieldInputType = FieldInputType.DATE,  displayInTable = false)
+    @NotNull
+    private Date dateOfBirth;
+    @DynamicFormField(displayInTable = false)
+    private City city;
+    @DynamicFormField(fieldInputType = FieldInputType.CURRENCY)
+    private double salary;
+
+    @DynamicFormField(displayInTable = false,
+            fieldInputType = FieldInputType.MULTI_SELECT,
+            staticOptionsAsCommaSeparatedString = "red,blue,yellow")
+    private List<String> favouriteColors;
 
 
+    @Override
+    public String toString() {
+        return name + " " + surname;
+    }
+}
+````
+2. Create form context
+If you use data which is not available in the moment of creating the form please load them asynchronousloy and after that load them in event dispatch thread. The lib provides convinient method to do in `SwingUtils.invokeInEDT`, for example
+```java
+// load data from db etc
+final List<City> cities = Arrays.asList(new City[]{
+                new City("Warsaw"),
+                new City("London"),
+                new City("London"),
+        });
+// create config based on annotations defined in model
+FormConfig formConfig = DynamicContextBuilder.getFormConfigBasedOnAnnotation(Person.class);
+// extend form config to set providers for fields or configure other options
+formConfig.addSelectProvider("city", (object, field) -> cities);
+```
+3. Create form context
+The form context object is a form manager resposible for logic and loading asynchronously data etc. You can load context synchronosuly or asynchronously. In this stage you should also load object to display in form.
+```java
+DynamicFormContext formContext = DynamicContextBuilder.getFormContextSync(
+                Person.builder()
+                        .name("John")
+                        .surname("Test")
+                        .salary(500)
+                        .sex(Sex.MALE)
+                        .dateOfBirth(new Date())
+                        .city(cities.get(0))
+                        .favouriteColors(Arrays.asList("red"))
+                        .build()
+                , formConfig);
+```
+4. Show obtained form in any component. For this example we have used a custom dialog
+```java
+// show form in UI thread
+SwingUtils.runInEDT(() -> new DynamicFormDialog(formContext));
+```
+5. Get results
+
+Generated form
+![generated form](images/simple-form-1.png)
+
+Validation example
+![generated form](images/simple-form-1-validation.png)
 # Form configuration
 ## Models 
 ### BaseDynamicConfig
@@ -55,15 +136,33 @@ public class TabsGroupsFormGroupRenderer implements DynamicFormGroupRenderer {
 - `DynamicFormComponentValueProxy componentValueProxy` - this service is responsible for copy values from object to components and vice versa. Providing this mechanism as a service is great if you would like to add new components for new types of fields 
 - `DynamicFormFieldProvider formFieldProvider` - this service is responsible for build fields used in forms
 - `DynamicFormValidator validator` - this service is resposible for validation. You can extend this component if you want to write custom validation logic. Currently this service utilize javax.validation package.
-- `DynamicFormLabelProvider labelProvider` - this service is resposible for providing labels and placeholders for fields. It is useful to overidde it when you have to implement i18n 
+- `DynamicFormLabelProvider labelProvider` - this service is resposible for providing labels and placeholders for fields. It is useful to overidde it when you have to implement i18n. By default it uses value form annotation if it is not set it use field name with title case conversion
 - `Map<String, SelectOptionProvider> selectProviders` - this is map of services resposible for providing dynamic data to select like components. You use them when you need to load asynchronously data from db or other type of resource
 - `List<FormGroupConfig> formGroups` - user defined form groups. Each group consists of name and fields in it.
 
 ## Annotations
 ### DynamicFormField
 This annotation is used to provide easy to use config for field both used in form and table. It provides following properties: 
-- `FieldInputType fieldInputType` - this is type of component used to choose corect field in form and renderer for tables. This options are available
-- `FieldSize fieldSize` - size of the field on the form. Similary to web gui frameworks like Bootsrap etc. we use grid like system so each row contains of 12 columns. You can configure how much space your field should have, by default it is a full row
+- `FieldInputType fieldInputType` - this is type of component used to choose corect field in form and renderer for tables. This options are available:
+  - DEFAULT - field component is choosen based on field type
+  - COMBOBOX - *JComboBox* is used as a component
+  - SELECT - *JList* is used as a component with single select option
+  - MULTI_SELECT - *JList* is used as a component with multi select option
+  - CHECKBOX - *JCheckbox* is used as a component 
+  - TOGGLE - *JToogleButton* is used as a component 
+  - PASSWORD - *JPasswordField* is used as a component 
+  - DATE - *JFormattedTextField* is used as a component with format configured in *FormConfig*
+  - DATE_TIME - *JFormattedTextField* is used as a component with format configured in *FormConfig*
+  - TIME - *JFormattedTextField* is used as a component with format configured in *FormConfig*
+  - CURRENCY - *JFormattedTextField* is used as a component with format configured in *FormConfig*
+  - DOUBLE - *JFormattedTextField* is used as a component with format configured in *FormConfig*
+  - INTEGER - *JFormattedTextField* is used as a component with format configured in *FormConfig*
+- `FieldSize fieldSize` - size of the field on the form. Similary to web gui frameworks like Bootsrap etc. we use grid like system so each row contains of 12 columns. You can configure how much space your field should have, by default it is a full row.  Available options are:
+  - ONE - field takes whole row size
+  - TWO - field takes 1/2 row size
+  - THREE - field takes 1/3 row size
+  - FOUR - field takes 1/4 row size
+  - SIX - field takes 1/6 row size
 - `boolean displayInForm` - if field should be displayed in a form
 - `int formFieldOrder` - order of field on the form
 - `String staticOptionsAsCommaSeparatedString` - comma separated list of options used for selects. Not always you need to use enums or any backend data provider to initialize it. In such cases you can provide them in this way
