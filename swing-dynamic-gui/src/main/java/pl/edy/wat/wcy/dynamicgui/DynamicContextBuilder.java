@@ -6,6 +6,7 @@ import pl.edy.wat.wcy.dynamicgui.form.models.FormConfig;
 import pl.edy.wat.wcy.dynamicgui.form.models.FormGroupConfig;
 import pl.edy.wat.wcy.dynamicgui.form.services.DynamicFormMetadataLoader;
 import pl.edy.wat.wcy.dynamicgui.form.services.defaults.DefaultDynamicFormMetadataLoader;
+import pl.edy.wat.wcy.dynamicgui.table.models.TableConfig;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -33,6 +34,8 @@ public class DynamicContextBuilder {
 
         return formConfig;
     }
+
+
 
     public static CompletableFuture<DynamicFormContext> getFormContext(Object object, FormConfig formConfig) {
         return CompletableFuture.supplyAsync(() -> {

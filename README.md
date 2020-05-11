@@ -3,8 +3,8 @@ This is a library providing easy and customisable way of building GUI in Java Sw
 
 # How to start
 ## Provided examples
-In order to run exampleas please download repository and execute `mvn install` and then just run the choosen example.
-## Create simple form
+In order to run attached examples please download/clone repository, execute `mvn install` and then just run the chosen example.
+## Custom form
 - Create used model and add `@DynamicFormField` annotations to some fields, for example
 ````java
 @DynamicFormConfig(
@@ -85,11 +85,63 @@ SwingUtils.runInEDT(() -> new DynamicFormDialog(formContext));
 ```
 - Get results
 
-Generated form
 ![generated form](images/simple-form-1.png)
 
-Validation example
 ![generated form](images/simple-form-1-validation.png)
+
+## Custom table
+- Create used model and add `@DynamicFormField` annotations to some fields/ Let's suppose that we use the same model as for form generation
+- Crate table config, context and table model
+```java
+ TableConfig tableConfig = new TableConfig(Person.class);
+DynamicTableContext tableContext = new DynamicTableContext(
+    tableConfig,
+    tableConfig.getMetadataProvider().loadMetadata(tableConfig)
+);
+DynamicFieldTableAdapter tableModel = new DynamicFieldTableAdapter(tableContext);
+```
+- Create table component and show it for example in form. Please remember to do this in EDT
+```java
+SwingUtils.runInEDT(()->{
+            JFrame frame = new JFrame();
+
+
+            JTable table = new JTable(tableModel);
+            table.setDefaultRenderer(Object.class, new DynamicTableContextRenderer(tableContext));
+            JScrollPane pane = new JScrollPane(table,
+                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            frame.add(table.getTableHeader(), BorderLayout.NORTH);
+            frame.add(pane, BorderLayout.CENTER);
+
+            frame.setTitle("Dynamic table example");
+            frame.pack();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            SwingUtils.centerOnScreen(frame, true);
+            frame.setVisible(true);
+        });
+```
+- load table data asynchronosuly besides EDT
+```java
+tableModel.loadData(Arrays.asList(
+                Person.builder()
+                        .name("John")
+                        .surname("Test")
+                        .salary(500)
+                        .sex(Sex.MALE)
+                        .build(),
+                Person.builder()
+                        .name("Anna")
+                        .surname("Swing")
+                        .sex(Sex.FEMALE)
+                        .salary(500)
+                        .build()));
+```
+- get results
+
+![generated table](images/simple-table-1.png)
 # Form configuration
 ## Models 
 ### BaseDynamicConfig
@@ -175,4 +227,16 @@ This annotation is used to provide easy to use config for field both used in for
 - `boolean displayInTable` - if field should be displayed in a table
 - `String tableHeader` - header title for this field, by default field name
 - `int tableFieldOrder` - order of table header for field
+
+# Table configuration
+## Models 
+### TableConfig
+It inherits from *BaseDynamicConfig* and consists of the following additional properties:
+- `String[] visibleFields` - list of configured visible fields, be default it is empty. It takes higher importance than value set in annotation
+- `String[] excludedFields`  - list of configured excluded fields, be default it is empty. It takes higher importance than value 
+- `Map<String, TableCellRenderer> tableRenderersByFieldName` - mappings for providing appropriate table renderer for field. it can be used when you don't want to override global defined renderers for field type or defined type
+- `Map<Class, TableCellRenderer> tableRenderersByType` - mappings for providing appropriate table renderer for field type. it can be used when you want to override global defined renderer for type
+- `Map<FieldInputType, TableCellRenderer> tableRenderersByFieldType` -  mappings for providing appropriate table renderer for field input type
+- `TableMetadataProvider metadataProvider` - service responsible for providing table config metadata
+- `TableHeaderProvider headerProvider` - service is resposible for providing headers in table for fields. It is useful to override it when you have to implement i18n. By default it uses value form annotation if it is not set it use field name with title case conversion
 
