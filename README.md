@@ -5,7 +5,7 @@ This is a library providing easy and customisable way of building GUI in Java Sw
 ## Provided examples
 In order to run exampleas please download repository and execute `mvn install` and then just run the choosen example.
 ## Create simple form
-1. Create used model and add `@DynamicFormField` annotations to some fields, for example
+- Create used model and add `@DynamicFormField` annotations to some fields, for example
 ````java
 @DynamicFormConfig(
         labelPosition = LabelPosition.TOP,
@@ -31,6 +31,7 @@ public class Person {
     @DynamicFormField(displayInTable = false)
     private City city;
     @DynamicFormField(fieldInputType = FieldInputType.CURRENCY)
+    @Min(0)
     private double salary;
 
     @DynamicFormField(displayInTable = false,
@@ -45,7 +46,8 @@ public class Person {
     }
 }
 ````
-2. Create form context
+
+- Create form context
 If you use data which is not available in the moment of creating the form please load them asynchronousloy and after that load them in event dispatch thread. The lib provides convinient method to do in `SwingUtils.invokeInEDT`, for example
 ```java
 // load data from db etc
@@ -58,8 +60,10 @@ final List<City> cities = Arrays.asList(new City[]{
 FormConfig formConfig = DynamicContextBuilder.getFormConfigBasedOnAnnotation(Person.class);
 // extend form config to set providers for fields or configure other options
 formConfig.addSelectProvider("city", (object, field) -> cities);
+// set groups renderer
+formConfig.setFormGroupsRenderer(new TabsGroupsFormGroupRenderer());
 ```
-3. Create form context
+- Create form context
 The form context object is a form manager resposible for logic and loading asynchronously data etc. You can load context synchronosuly or asynchronously. In this stage you should also load object to display in form.
 ```java
 DynamicFormContext formContext = DynamicContextBuilder.getFormContextSync(
@@ -74,12 +78,12 @@ DynamicFormContext formContext = DynamicContextBuilder.getFormContextSync(
                         .build()
                 , formConfig);
 ```
-4. Show obtained form in any component. For this example we have used a custom dialog
+- Show obtained form in any component. For this example we have used a custom dialog
 ```java
 // show form in UI thread
 SwingUtils.runInEDT(() -> new DynamicFormDialog(formContext));
 ```
-5. Get results
+- Get results
 
 Generated form
 ![generated form](images/simple-form-1.png)
