@@ -1,12 +1,12 @@
 package pl.edu.wat.wcy.swingdynamicgui.examples.simple;
 
+import pl.edu.wat.wcy.swingdynamicgui.table.DynamicFieldTableAdapter;
+import pl.edu.wat.wcy.swingdynamicgui.table.models.DynamicTableContext;
+import pl.edu.wat.wcy.swingdynamicgui.table.models.TableConfig;
+import pl.edu.wat.wcy.swingdynamicgui.table.renderers.DynamicTableContextRenderer;
+import pl.edu.wat.wcy.swingdynamicgui.utils.SwingUtils;
 import pl.edu.wat.wcy.swingdynamicgui.examples.model.Person;
 import pl.edu.wat.wcy.swingdynamicgui.examples.model.Sex;
-import pl.edy.wat.wcy.dynamicgui.table.DynamicFieldTableAdapter;
-import pl.edy.wat.wcy.dynamicgui.table.models.DynamicTableContext;
-import pl.edy.wat.wcy.dynamicgui.table.models.TableConfig;
-import pl.edy.wat.wcy.dynamicgui.table.renderers.DynamicTableContextRenderer;
-import pl.edy.wat.wcy.dynamicgui.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;

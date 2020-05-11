@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>swing-dynamic-gui-examples</artifactId>
-    <packaging>jar</packaging>
     <name>swing-dynamic-gui-simple-examples</name>
     <url>https://github.com/damianfraszczak/swing-dynamic-gui</url>
 
@@ -40,6 +39,16 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.insubstantial</groupId>
+            <artifactId>substance-swingx</artifactId>
+            <version>7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.insubstantial</groupId>
+            <artifactId>substance-flamingo</artifactId>
+            <version>7.3</version>
         </dependency>
     </dependencies>
 

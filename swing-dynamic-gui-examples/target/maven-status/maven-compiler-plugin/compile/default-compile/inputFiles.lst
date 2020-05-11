@@ -1,6 +1,9 @@
-G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\TableExampleApp.java
-G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\model\City.java
-G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\DynamicFormDialog.java
-G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\FormExampleApp.java
-G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\model\Person.java
-G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\model\Sex.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\crud\CrudAppExample.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\simple\TableExampleApp.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\crud\PersonCrudService.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\model\Sex.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\simple\FormExampleApp.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\crud\ExampleCrudTablePanel.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\model\Person.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\model\City.java
+G:\WAT\swing-dynamic-gui\swing-dynamic-gui-examples\src\main\java\pl\edu\wat\wcy\swingdynamicgui\examples\simple\simple\ExampleFormDialog.java
