@@ -3,6 +3,7 @@ package pl.edu.wat.wcy.swingdynamicgui.examples.crud;
 import org.jdesktop.swingx.JXTable;
 import pl.edu.wat.wcy.swingdynamicgui.DynamicContextBuilder;
 import pl.edu.wat.wcy.swingdynamicgui.form.components.DynamicFormDialog;
+import pl.edu.wat.wcy.swingdynamicgui.form.components.formgroup.FieldsetFormGroupRenderer;
 import pl.edu.wat.wcy.swingdynamicgui.form.components.formgroup.WithoutGroupsFormGroupRenderer;
 import pl.edu.wat.wcy.swingdynamicgui.form.models.FormConfig;
 import pl.edu.wat.wcy.swingdynamicgui.table.DynamicFieldTableAdapter;
@@ -171,7 +172,7 @@ public class ExampleCrudTablePanel extends JComponent {
         });
         this.formConfig = DynamicContextBuilder.getFormConfigBasedOnAnnotation(Person.class);
         formConfig.addSelectProvider("city", (object, field) -> cities);
-        formConfig.setFormGroupsRenderer(new WithoutGroupsFormGroupRenderer());
+        formConfig.setFormGroupsRenderer(new FieldsetFormGroupRenderer());
 
     }
 }

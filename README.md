@@ -4,23 +4,29 @@ This is a library providing easy and customisable way of building GUI in Java Sw
 # How to start
 ## Provided examples
 In order to run attached examples please download/clone repository, execute `mvn install` and then just run the chosen example.
+### model package
+This package consists of java POJOs used in forms
+### simple package
+This package includes the simplest examples of using lib. You can check `FormExampleApp` to visualize generated form and `TableExampleApp`
+ to check how to create dynamic table
+#### crud package
+This package provides an example how to can use lib in CRUD like app and how to laod data asynchronously outside the event dispatch thread. Moreover this example use one of the Look And Feels provided by Substance. Check it to get best UI with SWING.
 ## Custom form
 - Create used model and add `@DynamicFormField` annotations to some fields, for example
 ````java
 @DynamicFormConfig(
         labelPosition = LabelPosition.TOP,
         formGroups = {
-                @DynamicFormGroup(name = "Personal information", fields = {"name", "surname", "sex", "dateOfBirth", "city"}),
-                @DynamicFormGroup(name = "Additional info", fields = {"salary", "favouriteColors"}),
+                @DynamicFormGroup(name = "Personal information", size = FieldSize.TWO, fields = {"name", "surname", "sex", "dateOfBirth", "city"}),
+                @DynamicFormGroup(name = "Additional info",size = FieldSize.TWO, fields = {"salary", "favouriteColors"}),
         }
 )
 public class Person {
     @DynamicFormField(fieldSize = FieldSize.TWO)
-    // javax.validation constraint
-    @NotNull
+    @NotEmpty
     private String name;
     @DynamicFormField(fieldSize = FieldSize.TWO)
-    @NotNull
+    @NotEmpty
     private String surname;
     @DynamicFormField
     @NotNull
@@ -29,6 +35,7 @@ public class Person {
     @NotNull
     private Date dateOfBirth;
     @DynamicFormField(displayInTable = false)
+    @NotNull
     private City city;
     @DynamicFormField(fieldInputType = FieldInputType.CURRENCY)
     @Min(0)
@@ -37,6 +44,7 @@ public class Person {
     @DynamicFormField(displayInTable = false,
             fieldInputType = FieldInputType.MULTI_SELECT,
             staticOptionsAsCommaSeparatedString = "red,blue,yellow")
+    @NotNull
     private List<String> favouriteColors;
 
 
@@ -78,16 +86,20 @@ DynamicFormContext formContext = DynamicContextBuilder.getFormContextSync(
                         .build()
                 , formConfig);
 ```
-- Show obtained form in any component. For this example we have used a custom dialog
+- Show obtained form in any component. For this example we have used a custom dialog or you can use provided `DynamicFormDialog` for simplify this process
 ```java
 // show form in UI thread
-SwingUtils.runInEDT(() -> new DynamicFormDialog(formContext));
+SwingUtils.runInEDT(() -> new ExampleFormDialog(formContext));
 ```
 - Get results
 
-![generated form](images/simple-form-1.png)
+| Default SWING LAF  |  Substance LAF |
+|---|---|
+| ![generated form](images/simple-tabbed-form.PNG)  |  ![generated form](images/crud-table-tabs-groups.png) |
+| ![generated form](images/simple-form-fieldset-group-validation.png) |  ![generated form](images/crud-validation.png) |
 
-![generated form](images/simple-form-1-validation.png)
+
+
 
 ## Custom table
 - Create used model and add `@DynamicFormField` annotations to some fields/ Let's suppose that we use the same model as for form generation
@@ -141,7 +153,10 @@ tableModel.loadData(Arrays.asList(
 ```
 - get results
 
-![generated table](images/simple-table-1.png)
+|  SWING LAF | Substance LAF   |
+|---|---|
+| ![generated table](images/simple-table-1.png)  | ![generated table](images/crud-table.png)  |
+
 # Form configuration
 ## Models 
 ### BaseDynamicConfig
@@ -168,7 +183,7 @@ by default *LEFT* is set
 - `DynamicFormGroupRenderer formGroupsRenderer` - form groups renderer component. Form can contains from many groups and this component is resposible for layout them. The lib provides following options:
   - `WithoutGroupsFormGroupRenderer` - don't display form groups like groups only like plain fields
   - `TabsGroupsFormGroupRenderer` - display groups utilizing tabs component
- 
+  - `FieldsetFormGroupRenderer` - display groups as fieldsets
 by default *WithoutGroupsFormGroupRenderer* is used. To implement custom component resposible for rendering groups you need only to implement `DynamicFormGroupRenderer` interface and set it in `FormConfig`. Below there is a code resposible for rendering groups as tabs.
 ``` java
 public class TabsGroupsFormGroupRenderer implements DynamicFormGroupRenderer {
@@ -194,7 +209,7 @@ public class TabsGroupsFormGroupRenderer implements DynamicFormGroupRenderer {
 - `DynamicFormValidator validator` - this service is resposible for validation. You can extend this component if you want to write custom validation logic. Currently this service utilize javax.validation package.
 - `DynamicFormLabelProvider labelProvider` - this service is resposible for providing labels and placeholders for fields. It is useful to overidde it when you have to implement i18n. By default it uses value form annotation if it is not set it use field name with title case conversion
 - `Map<String, SelectOptionProvider> selectProviders` - this is map of services resposible for providing dynamic data to select like components. You use them when you need to load asynchronously data from db or other type of resource
-- `List<FormGroupConfig> formGroups` - user defined form groups. Each group consists of name and fields in it.
+- `List<FormGroupConfig> formGroups` - user defined form groups. Each group consists of name, size and fields in it.
 
 ## Annotations
 ### DynamicFormField
@@ -227,7 +242,32 @@ This annotation is used to provide easy to use config for field both used in for
 - `boolean displayInTable` - if field should be displayed in a table
 - `String tableHeader` - header title for this field, by default field name
 - `int tableFieldOrder` - order of table header for field
+### DynamicFormGroup
+- `String name` - name of group
+- `FieldSize size` - size of the form group
+- `String[] fields` - array of field names used in group
+## Custom validation
+To provide custom validation (when *javax.validation* is not sufficient) you can implement interface `DynamicFormValidator` to write custom validation. It is recommended to extends `DefaultDynamicFormValidator` to write custom validation logic. It provides `ValidationResult validate(Object object)` method, check below example:
+```java
+class AppDefaultDynamicFormValidator extends  DefaultDynamicFormValidator{
+    @Override
+    public ValidationResult validate(Object object) {
+        ValidationResult vr = super.validate(object);
+        if(object instanceof  Person   ){
+            Person p = (Person) object;
+            if(p.getSurname().length() > 30){
+                vr.addMessage("surname", "Surname is too long, it can be max 30 characters length");
+            }
+        }
 
+        return vr;
+    }
+}
+```
+and set it in `FormConfig` 
+```java
+formConfig.setValidator(new AppDefaultDynamicFormValidator());
+```
 # Table configuration
 ## Models 
 ### TableConfig
@@ -239,4 +279,23 @@ It inherits from *BaseDynamicConfig* and consists of the following additional pr
 - `Map<FieldInputType, TableCellRenderer> tableRenderersByFieldType` -  mappings for providing appropriate table renderer for field input type
 - `TableMetadataProvider metadataProvider` - service responsible for providing table config metadata
 - `TableHeaderProvider headerProvider` - service is resposible for providing headers in table for fields. It is useful to override it when you have to implement i18n. By default it uses value form annotation if it is not set it use field name with title case conversion
-
+## Annotations
+### DynamicFormField
+This is the same annotation used to mark fields being visible in form, for tables following properties are considered:
+- `FieldInputType fieldInputType` - this is type of component used to choose corect field in form and renderer for tables. This options are available:
+  - DEFAULT - field component is choosen based on field type
+  - COMBOBOX - *DefaultTableTreeCellRendere* is used as a component
+  - SELECT - *DefaultTableTreeCellRendere* is used as a component with single select option
+  - MULTI_SELECT - *CollectionRenderer* is used as a table cell renderer
+  - CHECKBOX - *DefaultTableTreeCellRendere* is used as a component 
+  - TOGGLE - *DefaultTableTreeCellRendere* is used as a component 
+  - PASSWORD - *PasswordCellRenderer* is used as a table cell renderer
+  - DATE - *FormatRenderer* is used as a table cell renderer
+  - DATE_TIME -  *FormatRenderer* is used as a table cell renderer
+  - TIME -  *FormatRenderer* is used as a table cell renderer
+  - CURRENCY -  *FormatRenderer* is used as a table cell renderer
+  - DOUBLE -  *FormatRenderer* is used as a table cell renderer
+  - INTEGER -  *FormatRenderer* is used as a table cell renderer
+- `boolean displayInTable` - if field should be displayed in a table
+- `String tableHeader` - header title for this field, by default field name
+- `int tableFieldOrder` - order of table header for field

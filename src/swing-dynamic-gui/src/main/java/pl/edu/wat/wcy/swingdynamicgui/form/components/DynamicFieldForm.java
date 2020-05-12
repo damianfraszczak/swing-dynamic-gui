@@ -36,7 +36,7 @@ public class DynamicFieldForm extends JComponent {
 
     private void initComponents() {
         inputComponent = context.getFormField(fieldMetadata);
-        fieldLabel = new JLabel(fieldMetadata.getFieldLabel());
+        fieldLabel = new JLabel(fieldMetadata.getFieldLabel() + context.getFormConfig().getLabelPostfix());
         defaultInputBorder = inputComponent.getBorder();
     }
 
