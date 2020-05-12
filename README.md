@@ -1,4 +1,6 @@
 # swing-dynamic-gui
+![](https://github.com/damianfraszczak/swing-dynamic-gui/workflows/Java%20CI%20with%20Maven/badge.svg)
+
 This is a library providing easy and customisable way of building GUI in Java Swing applications utilizing forms and tables generation based on config via both annotations and code.
 
 # How to start
