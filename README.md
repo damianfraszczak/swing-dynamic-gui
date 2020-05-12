@@ -95,8 +95,8 @@ SwingUtils.runInEDT(() -> new ExampleFormDialog(formContext));
 
 | Default SWING LAF  |  Substance LAF |
 |---|---|
-| ![generated form](images/simple-tabbed-form.PNG)  |  ![generated form](images/crud-table-tabs-groups.png) |
-| ![generated form](images/simple-form-fieldset-group-validation.png) |  ![generated form](images/crud-validation.png) |
+| ![generated form](images/simple-tabbed-form.PNG)  |  ![generated form](images/crud-table-tabs-groups.PNG) |
+| ![generated form](images/simple-form-fieldset-group-validation.png) |  ![generated form](images/crud-validation.PNG) |
 
 
 
@@ -155,7 +155,7 @@ tableModel.loadData(Arrays.asList(
 
 |  SWING LAF | Substance LAF   |
 |---|---|
-| ![generated table](images/simple-table-1.png)  | ![generated table](images/crud-table.png)  |
+| ![generated table](images/simple-table-1.png)  | ![generated table](images/crud-table.PNG)  |
 
 # Form configuration
 ## Models 
