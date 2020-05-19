@@ -16,6 +16,12 @@ This is a library providing easy and customisable way of building GUI in Java Sw
 # How to start
 ## Check provided examples
 In order to run attached examples please download/clone repository, execute `mvn install` and then just run the chosen example.
+
+If you want to run crud example from command line, please you following  script in project src root
+```
+mvn install
+mvn exec:java -pl swing-dynamic-gui-examples -Dexec.mainClass="pl.edu.wat.wcy.swingdynamicgui.examples.crud.CrudAppExample"
+```
 ### model package
 This package consists of java POJOs used in forms
 ### simple package
