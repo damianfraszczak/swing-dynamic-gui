@@ -12,6 +12,9 @@ import pl.edu.wat.wcy.swingdynamicgui.table.services.defaults.DefaultTableMedata
 import pl.edu.wat.wcy.swingdynamicgui.utils.DynamicFormUtils;
 
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +22,17 @@ import java.util.Map;
 @Data
 public class TableConfig extends BaseDynamicConfig {
 
+
+    // from BaseDynamicConfig
+    private String dateFormatString = "dd/MM/yyyy";
+    private String timeFormatString = "HH:mm";
+    private String dateTimeFormatString = dateFormatString + " " + timeFormatString;
+
+    private Format doubleFormat = NumberFormat.getNumberInstance();
+    private Format integerFormat = NumberFormat.getIntegerInstance();
+    private Format currencyFormat = NumberFormat.getCurrencyInstance();
+
+    private Color errorColor = Color.RED;
 
     @NonNull
     private Class dataType;

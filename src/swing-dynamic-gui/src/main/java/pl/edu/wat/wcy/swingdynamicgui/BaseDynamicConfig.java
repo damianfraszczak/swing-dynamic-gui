@@ -8,7 +8,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 @Data
-public abstract class BaseDynamicConfig {
+public class BaseDynamicConfig {
     private String dateFormatString = "dd/MM/yyyy";
     private String timeFormatString = "HH:mm";
     private String dateTimeFormatString = dateFormatString + " " + timeFormatString;
