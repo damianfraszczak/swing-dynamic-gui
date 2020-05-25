@@ -11,7 +11,11 @@ import pl.edu.wat.wcy.swingdynamicgui.form.components.formgroup.WithoutGroupsFor
 import pl.edu.wat.wcy.swingdynamicgui.form.services.*;
 import pl.edu.wat.wcy.swingdynamicgui.form.services.defaults.*;
 import pl.edu.wat.wcy.swingdynamicgui.utils.DynamicFormUtils;
+import pl.edu.wat.wcy.swingdynamicgui.utils.SerializationUtils;
 
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,4 +53,8 @@ public class FormConfig extends BaseDynamicConfig {
     public SelectOptionProvider getSelectProviderForField(String fieldName) {
         return selectProviders.getOrDefault(DynamicFormUtils.normalizeFieldName(fieldName), null);
     }
+    public static FormConfig  loadConfig(File file) throws IOException {
+        return SerializationUtils.readFromXml(FormConfig.class, file);
+    }
+
 }

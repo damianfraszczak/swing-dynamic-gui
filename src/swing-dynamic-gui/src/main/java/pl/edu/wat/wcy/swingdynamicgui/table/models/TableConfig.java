@@ -5,14 +5,19 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import pl.edu.wat.wcy.swingdynamicgui.BaseDynamicConfig;
 import pl.edu.wat.wcy.swingdynamicgui.enums.FieldInputType;
+import pl.edu.wat.wcy.swingdynamicgui.form.models.FormConfig;
 import pl.edu.wat.wcy.swingdynamicgui.table.services.TableHeaderProvider;
 import pl.edu.wat.wcy.swingdynamicgui.table.services.TableMetadataProvider;
 import pl.edu.wat.wcy.swingdynamicgui.table.services.defaults.DefaultTableHeaderProvider;
 import pl.edu.wat.wcy.swingdynamicgui.table.services.defaults.DefaultTableMedatadaProvider;
 import pl.edu.wat.wcy.swingdynamicgui.utils.DynamicFormUtils;
+import pl.edu.wat.wcy.swingdynamicgui.utils.SerializationUtils;
 
 import javax.swing.table.TableCellRenderer;
+import javax.xml.bind.JAXBException;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.HashMap;
@@ -55,5 +60,7 @@ public class TableConfig extends BaseDynamicConfig {
     public void addTableCellRendererByFieldType(FieldInputType inputType, TableCellRenderer renderer) {
         this.tableRenderersByFieldType.put(inputType, renderer);
     }
-
+    public static TableConfig loadConfig(File file) throws IOException {
+        return SerializationUtils.readFromXml(TableConfig.class, file);
+    }
 }

@@ -7,7 +7,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 public class DefaultDynamicFormValidator implements DynamicFormValidator {
-    private final Validator validator;
+    private transient final Validator validator;
 
     public DefaultDynamicFormValidator() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
