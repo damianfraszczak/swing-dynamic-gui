@@ -3,6 +3,13 @@
 
 This is a library providing easy and customisable way of building GUI in Java Swing applications utilizing forms and tables generation based on config via both annotations and code.
 
+If you use _SwingDynamicGUI_ as support to your research consider citing:
+
+`D. Frąszczak, D. Bugajewski, K. Magdziarz. Swing Dynamic GUI
+, Proceedings of the 40th International Business Information Management Association (IBIMA). 2022.` http://dx.doi.org/10.6084/m9.figshare.21702143.v1, 
+
+[RG paper](https://www.researchgate.net/publication/367204844_Swing_Dynamic_GUI)
+
 ## Dynamic forms
 | Default SWING LAF  |  Substance LAF |
 |---|---|
